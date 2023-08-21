@@ -1,0 +1,23 @@
+# maelstrom installation
+/maelstrom
+
+/target
+/classes
+/checkouts
+/class
+store/
+/pom.xml
+/pom.xml.asc
+*.log
+.*.swp
+~.*
+*.jar
+*.class
+/.lein-*
+/.nrepl-port
+.hgignore
+.hg/
+.DS_Store
+.idea
+/demo/rust/target
+__pycache__/
