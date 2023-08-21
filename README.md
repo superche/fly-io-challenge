@@ -23,5 +23,5 @@ Download the latest tarball from [Github](https://github.com/jepsen-io/maelstrom
 https://fly.io/dist-sys/1/
 
 ```bash
-./maelstrom test -w echo --bin ./src/echo.js --time-limit 5
+./maelstrom/maelstrom test -w echo --bin ./src/echo.js --time-limit 5
 ```
