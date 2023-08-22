@@ -16,7 +16,7 @@ module.exports = class Node {
     rl.on('line', (line) => {
       console.warn('Got', line)
       this._handle(JSON.parse(line))
-    });
+    })
   }
 
   reply = (req, data) => {
@@ -41,7 +41,7 @@ module.exports = class Node {
 
       const handler = this.handlers[type]
       if (handler === undefined) {
-        console.warn('Don\'t know how to handle msg type', type, '(', req, ')');
+        console.warn('Don\'t know how to handle msg type', type, '(', req, ')')
         this.reply(req, {
           type: 'error',
           code: 10,
