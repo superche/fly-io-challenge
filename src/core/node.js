@@ -1,7 +1,7 @@
 'use strict'
 
-const { send } = require('../utils/network')
-const { rl } = require('../utils/readline')
+const { generateRPCMessageId } = require('../utils/id')
+const { Network } = require('../utils/network')
 
 module.exports = class Node {
   constructor() {
@@ -10,13 +10,8 @@ module.exports = class Node {
     }
     this.nodeId = ''
     this.nodeIds = []
-  }
-
-  main = () => {
-    rl.on('line', (line) => {
-      console.warn('Got', line)
-      this._handle(JSON.parse(line))
-    })
+    this.network = new Network()
+    this.network.on('receive', this._handle)
   }
 
   reply = (req, data) => {
@@ -27,11 +22,33 @@ module.exports = class Node {
       in_reply_to: msg_id
     }
 
-    send(this.nodeId, req.src, body)
+    this.network.send(this.nodeId, req.src, body)
+      .catch(() => {
+        // reply ignore error
+      })
   }
 
   on = (type, handler) => {
     this.handlers[type] = handler
+  }
+
+  rpcWithRetry = async (dest, body, retries = 50) => {
+    while(true) {
+      try {
+        const responseBody = await this._rpc(dest, body)
+        return responseBody
+      } catch (err) {
+        console.error('rpcWithRetry got error: ' + err)
+      }
+    }
+  }
+
+  _rpc = (dest, body) => {
+    const body2 = {
+      ...body,
+      msg_id: generateRPCMessageId()
+    }
+    return this.network.send(this.nodeId, dest, body2)
   }
 
   _handle = async (req) => {

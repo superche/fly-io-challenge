@@ -11,5 +11,3 @@ node.on('echo', req => {
     echo: req.body.echo
   })
 })
-
-node.main()
