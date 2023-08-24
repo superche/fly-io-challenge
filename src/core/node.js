@@ -32,6 +32,14 @@ module.exports = class Node {
     this.handlers[type] = handler
   }
 
+  rpc = (dest, body) => {
+    const body2 = {
+      ...body,
+      msg_id: generateRPCMessageId()
+    }
+    return this.network.send(this.nodeId, dest, body2)
+  }
+
   rpcWithRetry = async (dest, body, retries = 50) => {
     while(true) {
       try {
@@ -41,14 +49,6 @@ module.exports = class Node {
         console.error('rpcWithRetry got error: ' + err)
       }
     }
-  }
-
-  _rpc = (dest, body) => {
-    const body2 = {
-      ...body,
-      msg_id: generateRPCMessageId()
-    }
-    return this.network.send(this.nodeId, dest, body2)
   }
 
   _handle = async (req) => {

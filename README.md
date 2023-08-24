@@ -60,3 +60,13 @@ Efficient Broadcast
 ```bash
 ./maelstrom/maelstrom test -w broadcast --bin ./src/broadcast.js --node-count 25 --time-limit 20 --rate 100 --latency 100
 ```
+
+### 4. Grow-Only Counter
+
+status: WIP
+
+https://fly.io/dist-sys/4/
+
+```bash
+./maelstrom/maelstrom test -w g-counter --bin ./src/g-counter.js --node-count 3 --rate 100 --time-limit 20 --nemesis partition
+```
