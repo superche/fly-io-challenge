@@ -17,6 +17,7 @@ const KEY = 'g-counter'
 // }
 const stateZero = new Map()
 stateZero.set(KEY, {
+  time: -1,
   type: 'add',
   key: KEY,
   value: 0,
@@ -35,7 +36,10 @@ const apply = (s, op) => {
     newProcessState.state.set(op.key, op)
   } else {
     const oldOp = newProcessState.state.get(op.key)
-    if (op.time > oldOp.time || (op.time === oldOp.time && op.nodeId > oldOp.nodeId)) {
+    if (
+      op.time > oldOp.time
+      || (op.time === oldOp.time && op.nodeId > oldOp.nodeId)
+    ) {
       newProcessState.state.set(op.key, op)
     }
   }
@@ -48,7 +52,6 @@ const checkState = (s, op) => {
 }
 
 node.on('add', req => {
-  console.warn('on add. delta:', req.body.delta)
   const oldOp = processState.state.get(KEY)
   const op = {
     time: processState.time,
@@ -62,6 +65,21 @@ node.on('add', req => {
   node.reply(req, {
     type: 'add_ok',
   })
+
+  // replicate
+  for (const peer of (node.nodeIds || [])) {
+    if (peer !== node.nodeId) {
+      node.rpc(peer, {
+        time: processState.time,
+        nodeId: node.nodeId,
+        type: 'replicate',
+        key: KEY,
+        value: processState.state.get(KEY).value,
+      }).catch(err => {
+        console.warn('Replicate error:', err)
+      })
+    }
+  }
 })
 
 node.on('read', req => {
@@ -77,20 +95,3 @@ node.on('replicate', req => {
   const op = req.body
   processState = apply(processState, op)
 })
-
-setInterval(() => {
-  console.warn('Replicate!')
-  for (const peer of (node.nodeIds || [])) {
-    if (peer !== node.nodeId) {
-      node.rpc(peer, {
-        time: processState.time,
-        nodeId: node.nodeId,
-        type: 'replicate',
-        key: KEY,
-        value: processState.state.get(KEY).value,
-      }).catch(err => {
-        console.warn('Replicate error:', err)
-      })
-    }
-  }
-}, 300)

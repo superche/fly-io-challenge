@@ -67,6 +67,14 @@ status: WIP
 
 https://fly.io/dist-sys/4/
 
+Single-Node Counter
+
+```bash
+./maelstrom/maelstrom test -w g-counter --bin ./src/g-counter.js --node-count 1 --rate 100 --time-limit 20 --nemesis partition
+```
+
+Multi-Node Counter
+
 ```bash
 ./maelstrom/maelstrom test -w g-counter --bin ./src/g-counter.js --node-count 3 --rate 100 --time-limit 20 --nemesis partition
 ```
