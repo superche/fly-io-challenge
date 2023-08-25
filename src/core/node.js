@@ -40,12 +40,13 @@ module.exports = class Node {
     return this.network.send(this.nodeId, dest, body2)
   }
 
-  rpcWithRetry = async (dest, body, retries = 50) => {
-    while(true) {
+  rpcWithRetry = async (dest, body, retries = 3) => {
+    while(retries > 0) {
       try {
         const responseBody = await this.rpc(dest, body)
         return responseBody
       } catch (err) {
+        retries--
         console.error('rpcWithRetry got error: ' + err)
       }
     }
