@@ -40,7 +40,7 @@ module.exports = class Node {
     return this.network.send(this.nodeId, dest, body2)
   }
 
-  rpcWithRetry = async (dest, body, retries = 3) => {
+  rpcWithRetry = async (dest, body, retries = 20) => {
     while(retries > 0) {
       try {
         const responseBody = await this.rpc(dest, body)
