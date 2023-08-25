@@ -43,7 +43,7 @@ module.exports = class Node {
   rpcWithRetry = async (dest, body, retries = 50) => {
     while(true) {
       try {
-        const responseBody = await this._rpc(dest, body)
+        const responseBody = await this.rpc(dest, body)
         return responseBody
       } catch (err) {
         console.error('rpcWithRetry got error: ' + err)

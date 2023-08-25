@@ -1,4 +1,4 @@
-#!/usr/local/bin/node
+#!/usr/bin/env node
 
 // A basic broadcast system
 const Node = require('./core/node')
