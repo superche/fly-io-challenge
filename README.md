@@ -81,6 +81,8 @@ Multi-Node Counter
 
 ### 5. Kafka-Style Log
 
+status: WIP
+
 https://fly.io/dist-sys/5a/
 
 Single-Node
