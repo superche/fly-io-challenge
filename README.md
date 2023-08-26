@@ -78,3 +78,19 @@ Multi-Node Counter
 ```bash
 ./maelstrom/maelstrom test -w g-counter --bin ./src/g-counter.js --node-count 3 --rate 100 --time-limit 20 --nemesis partition
 ```
+
+### 5. Kafka-Style Log
+
+https://fly.io/dist-sys/5a/
+
+Single-Node
+
+```bash
+./maelstrom/maelstrom test -w kafka --bin ./src/kafka.js --node-count 1 --concurrency 2n --time-limit 20 --rate 1000
+```
+
+Multi-Node
+
+```bash
+./maelstrom/maelstrom test -w kafka --bin ./src/kafka.js --node-count 2 --concurrency 2n --time-limit 20 --rate 1000
+```
