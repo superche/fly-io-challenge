@@ -8,9 +8,8 @@ const node = new Node()
 
 const log = {
   messages: new Map(), // key -> msg[]
-  offsets: new Map(), // key -> offset
-  diffs: new Map(), // node -> key -> msg[]
   syncOffset: new Map(), // key -> offset
+  diffs: new Map(), // node -> key -> msg[]
 }
 
 function send(key, msg) {
@@ -60,21 +59,21 @@ function poll(key, offset) {
   }
 
   const arr = log.messages.get(key)
-  const msgs = arr.slice(offset, syncOffset)
+  const msgs = arr.slice(offset, syncOffset + 1)
   return msgs.map((msg, i) => [offset + i, msg])
 }
 
 function commitOffsets(key, offset) {
-  if (!log.offsets.has(key)) {
-    log.offsets.set(key, 0)
+  if (!log.syncOffset.has(key)) {
+    log.syncOffset.set(key, 0)
   }
-  if (log.offsets.get(key) < offset) {
-    log.offsets.set(key, offset)
+  if (log.syncOffset.get(key) < offset) {
+    log.syncOffset.set(key, offset)
   }
 }
 
 function getCommittedOffsets(key) {
-  return log.offsets.get(key)
+  return log.syncOffset.get(key)
 }
 
 function handleReplication(entries) {
@@ -94,9 +93,9 @@ function handleReplication(entries) {
     }
 
     // sync offset
-    let syncOffset = log.syncOffset.get(key)
-    if (syncOffset < arr.length) {
-      syncOffset = arr.length
+    let syncOffset = log.syncOffset.get(key) || 0
+    if (syncOffset < msgs.length) {
+      syncOffset = msgs.length
     }
     log.syncOffset.set(key, syncOffset)
   })
@@ -105,6 +104,7 @@ function handleReplication(entries) {
 node.on('send', req => {
   const { key, msg } = req.body
   const offset = send(key, msg)
+
   node.reply(req, {
     type: 'send_ok',
     offset,
