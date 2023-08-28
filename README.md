@@ -96,3 +96,25 @@ Multi-Node
 ```bash
 ./maelstrom/maelstrom test -w kafka --bin ./src/kafka.js --node-count 2 --concurrency 2n --time-limit 20 --rate 1000 --log-stderr
 ```
+
+### 6. Transactions
+
+https://fly.io/dist-sys/6a/
+
+Single-Node, Totally-Available Transactions
+
+```bash
+./maelstrom/maelstrom test -w txn-rw-register --bin ./src/txn-rw-register/index.js --node-count 1 --time-limit 20 --rate 1000 --concurrency 2n --consistency-models read-uncommitted --availability total --log-stderr
+```
+
+Totally-Available, Read Uncommitted Transactions
+
+```bash
+./maelstrom/maelstrom test -w txn-rw-register --bin ./src/txn-rw-register/index.js --node-count 2 --concurrency 2n --time-limit 20 --rate 1000 --consistency-models read-uncommitted --availability total --nemesis partition --log-stderr
+```
+
+Totally-Available, Read Committed Transactions
+
+```bash
+./maelstrom/maelstrom test -w txn-rw-register --bin ./src/txn-rw-register/index.js --node-count 2 --concurrency 2n --time-limit 20 --rate 1000 --consistency-models read-committed --availability total –-nemesis partition --log-stderr
+```

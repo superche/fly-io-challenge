@@ -73,9 +73,9 @@ class Network extends EventEmitter {
         if (handler) {
           this.replyHandlers.delete(in_reply_to)
           if (type === 'error') {
-            handler.reject(body);
+            handler.reject(req.body);
           } else {
-            handler.resolve(body);
+            handler.resolve(req.body);
           }
         }
       }
