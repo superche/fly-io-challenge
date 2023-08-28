@@ -57,7 +57,7 @@ Fault Tolerant Broadcast
 
 Efficient Broadcast
 
-status: WIP
+![](https://img.shields.io/badge/Status-Working%20In%20Progress-orange.svg)
 
 ```bash
 ./maelstrom/maelstrom test -w broadcast --bin ./src/broadcast.js --node-count 25 --time-limit 20 --rate 100 --latency 100 --log-stderr
@@ -91,7 +91,7 @@ Single-Node
 
 Multi-Node
 
-status: WIP
+![](https://img.shields.io/badge/Status-Working%20In%20Progress-orange.svg)
 
 ```bash
 ./maelstrom/maelstrom test -w kafka --bin ./src/kafka.js --node-count 2 --concurrency 2n --time-limit 20 --rate 1000 --log-stderr
